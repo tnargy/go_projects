@@ -7,5 +7,5 @@ type Client struct {
 }
 
 func New(apiKey string) *Client {
-	return &Client(apiKey: apiKey)
+	return &Client{apiKey: apiKey}
 }

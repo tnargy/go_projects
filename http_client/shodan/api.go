@@ -7,12 +7,12 @@ import (
 )
 
 type APIInfo struct {
-	QueryCredits int  `json:"query_credits"`
-	ScanCredits  int  `json:"scan_credits"`
-	Telnet       bool `json:"telnet"`
-	Plan         bool `json:"plan"`
-	HTTPS        bool `json:"https"`
-	Unlocked     bool `json:"unlocked"`
+	QueryCredits int    `json:"query_credits"`
+	ScanCredits  int    `json:"scan_credits"`
+	Telnet       bool   `json:"telnet"`
+	Plan         string `json:"plan"`
+	HTTPS        bool   `json:"https"`
+	Unlocked     bool   `json:"unlocked"`
 }
 
 func (s *Client) APIInfo() (*APIInfo, error) {
