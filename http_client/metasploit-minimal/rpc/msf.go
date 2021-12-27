@@ -2,7 +2,6 @@ package rpc
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -112,8 +111,8 @@ func (msf *Metasploit) Login() error {
 
 func (msf *Metasploit) Logout() error {
 	ctx := &logoutReq{
-		Method:   "auth.logout",
-		Token: msf.token,
+		Method:      "auth.logout",
+		Token:       msf.token,
 		LogoutToken: msf.token,
 	}
 	var res logoutRes
@@ -127,7 +126,7 @@ func (msf *Metasploit) Logout() error {
 func (msf *Metasploit) SessionList() (map[uint32]SessionListRes, error) {
 	req := &sessionListReq{
 		Method: "session.list",
-		Token: msf.token
+		Token:  msf.token,
 	}
 	res := make(map[uint32]SessionListRes)
 	if err := msf.send(req, &res); err != nil {
