@@ -2,26 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
-type router struct {
+type logger struct {
+	Inner http.Handler
 }
 
-func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	switch req.URL.Path {
-	case "/a":
-		fmt.Fprint(w, "Executing /a")
-	case "/b":
-		fmt.Fprint(w, "Executing /b")
-	case "/c":
-		fmt.Fprint(w, "Executing /c")
-	default:
-		http.Error(w, "404 Not Found", 404)
-	}
+func (l *logger) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	log.Println("start")
+	l.Inner.ServeHTTP(w, req)
+	log.Println("finish")
+}
+
+func hello(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprint(w, "Hello\n")
 }
 
 func main() {
-	var r router
-	http.ListenAndServe(":8000", &r)
+	f := http.HandlerFunc(hello)
+	l := logger{Inner: f}
+	http.ListenAndServe(":8000", &l)
 }
